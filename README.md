@@ -1,9 +1,9 @@
+# Analítica NLP: WhatsApp frente a Telegram
 
-# SAD-Clasificacion-Automatizada
-![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.11-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-Este repositorio contiene la implementación un pipeline completo de procesamiento de Lenguaje Natural (NLP) y Machine Learning diseñado para auditar la salud competitiva de WhatsApp frente a Telegram, todo ello para la asignatura de **Sistemas de Ayuda a la Decisión (SAD)** de la **Universidad del País Vasco (UPV/EHU)**. El objetivo principal es ir más allá de la simple clasificación de sentimientos, logrando extraer inteligencia de negocio procesable sobre los motivos reales de retención y fuga de usuarios.  
+Este repositorio contiene la implementación de un pipeline completo de procesamiento de Lenguaje Natural (NLP) y Machine Learning diseñado para auditar la salud competitiva de WhatsApp frente a Telegram, todo ello para la asignatura de **Sistemas de Ayuda a la Decisión (SAD)** de la **Universidad del País Vasco (UPV/EHU)**. El objetivo principal es ir más allá de la simple clasificación de sentimientos, logrando extraer inteligencia de negocio procesable sobre los motivos reales de retención y fuga de usuarios.  
  
 El proyecto abarca desde la limpieza de datos en crudo hasta el modelado de tópicos no supervisado, culminando en una comparativa técnica entre algoritmos de clasificación tradicionales y modelos de Inteligencia Artificial Generativa. Los hallazgos se visualizan estratégicamente mediante dashboards en Tableau.
 
@@ -19,11 +19,12 @@ El proyecto abarca desde la limpieza de datos en crudo hasta el modelado de tóp
 El repositorio está estructurado para reflejar el ciclo de vida de los datos:
 
 ### 1. Preprocesamiento y Preparación de Datos  
-*   **`preparar_csv.py`**: Automatiza la unificación y normalización de datasets (fuentes reales y sintéticas) en un CSV maestro para el entrenamiento de modelos de IA. El código estandariza las notas de cada opinión en etiquetas (positivo, negativo y neutro), limpia inconsistencias en el texto y homogeniza estructuras dispares, garantizando un corpus de datos limpio y listo para tareas de NLP.
+*   **`preparar_csv.py`**: Automatiza la unificación y normalización de datasets (fuentes reales y sintéticas) en un CSV maestro para el entrenamiento de modelos de IA. El código estandariza las notas de cada opinión en etiquetas (positivo, negativo y neutro), limpia inconsistencias en el texto y homogeneiza estructuras dispares, garantizando un corpus de datos limpio y listo para tareas de NLP.
   
 ### 2. Aprendizaje No Supervisado (Topic Modeling)
 *   **`grafico_lda.py`**: Entorno de experimentación y evaluación. Itera el modelo generativo LDA probando múltiples configuraciones de tópicos (K). Utiliza la métrica matemática de **Coherencia (C_V)** para determinar empíricamente el número óptimo de clusters (diferenciando entre reseñas positivas y negativas) antes de pasar a producción.
-*   **`clustering_lda.py`**: Pipeline de producción e Inteligencia de Negocio. Implementa Latent Dirichlet Allocation (LDA) con los hiperparámetros óptimos extraídos de la gráfica. Aísla las quejas funcionales eliminando ruido emocional, etiqueta las reseñas, y cruza probabilísticamente los tópicos con metadatos de los usuarios (Continente, Plataforma, Género y Mes/Año). Los resultados alimentan directamente la toma de decisiones en Tableau. 
+*   **`clustering_lda.py`**: Pipeline de producción e Inteligencia de Negocio. Implementa Latent Dirichlet Allocation (LDA) con los hiperparámetros óptimos extraídos de la gráfica. Aísla las quejas funcionales eliminando ruido emocional, etiqueta las reseñas, y cruza probabilísticamente los tópicos con metadatos de los usuarios (Continente, Plataforma, Género y Mes/Año). Los resultados alimentan directamente la toma de decisiones en Tableau.
+
 ### 3. Machine Learning Tradicional (Supervisado)
 * **`train.py`**: Script que realiza la carga de datos, preproceso dinámico, partición estratificada, barrido de parámetros (Grid Search) y selección del mejor modelo.
 * **`test.py`**: Programa para cargar el modelo ganador y clasificar nuevas instancias, manteniendo la consistencia del preproceso.
@@ -34,32 +35,32 @@ El repositorio está estructurado para reflejar el ciclo de vida de los datos:
 *   **`generativo_oversampling.py`**: Script experimental que utiliza IA generativa para la creación de datos sintéticos, buscando balancear clases minoritarias en el dataset sin recurrir a técnicas de duplicación clásica.  
 
 ### 5. Estructura de las carpetas
-* **`proyectos/{project_name}/`**: 
+* **`proyectos/{project_name}/`**:
   * **`datos/`**: Copias de seguridad de los datasets utilizados y tests automáticos.
   * **`best_model/`**: Contiene `bestmodel.sav`, `preprocessing_objects.sav`, `configuracion_usada.json`, `test.csv` (si se ha indicado su creación) y el informe de `ultimos_resultados.csv`.
+    * **`predicciones_generadas/`**: CSVs resultantes de las ejecuciones de `test.py`.
   * **`archivo_versiones/`**: Histórico de modelos previos archivados al encontrar una mejora en el F-score.
-  * **`predicciones_generadas/`**: CSVs resultantes de las ejecuciones de `test.py`.
   
-```
-      .
-      ├── train.py                # Script de entrenamiento y optimización
-      ├── test.py                 # Script de inferencia y evaluación
-      ├── configuration.json      # Configuración de experimentos
-      └── proyectos/
-          └── {project_name}/     # Carpeta creada automáticamente
-              ├── datos/          # Copias de seguridad y tests estratificados
-              │   ├── entrenamiento_dataset.csv
-              │   └── test_automatico_Iris.csv
-              ├── best_model/     # El modelo con mejor F1-score hasta la fecha
-              │   ├── bestmodel.sav
-              │   ├── preprocessing_objects.sav
-              │   ├── ultimos_resultados.csv
-              │   └── predicciones_generadas/
-              │       └── pred_KNN_F1_0.98_dataset.csv
-              └── archivo_versiones/ # Historial de modelos
-                  └── v_F1_0.9200_2026-03-20_10-30/
-                      ├── bestmodel.sav
-                      └── preprocessing_objects.sav
+```text
+.
+├── train.py                # Script de entrenamiento y optimización
+├── test.py                 # Script de inferencia y evaluación
+├── configuration.json      # Configuración de experimentos
+└── proyectos/
+    └── {project_name}/     # Carpeta creada automáticamente
+        ├── datos/          # Copias de seguridad y tests estratificados
+        │   ├── entrenamiento_dataset.csv
+        │   └── test_automatico.csv
+        ├── best_model/     # El modelo con mejor F-score hasta la fecha
+        │   ├── bestmodel.sav
+        │   ├── preprocessing_objects.sav
+        │   ├── ultimos_resultados.csv
+        │   └── predicciones_generadas/
+        │       └── pred_KNN_F1_0.98_dataset.csv
+        └── archivo_versiones/ # Historial de modelos
+            └── v_F1_0.9200_2026-03-20_10-30/
+                ├── bestmodel.sav
+                └── preprocessing_objects.sav
 ```
 
 ---
@@ -104,14 +105,14 @@ El archivo de configuración, el cual se muestra a continuación, actúa como el
       "min_samples_leaf": [1, 2, 5]  
     },  
     "random_forest": {  
-        "n_estimators": [100, 200, 300],  
-        "max_depth": [10, 20, null]  
+      "n_estimators": [100, 200, 300],  
+      "max_depth": [10, 20, null]  
     },  
     "naive_bayes": {  
       "n_bins": [5, 10, 15],  
       "alphas": [0.01, 0.1, 0.5, 1.0],  
       "min_categories": null  
-  },  
+    },  
     "logistic_regression": {  
       "C": [10],  
       "solver": ["lbfgs", "saga"]  
@@ -137,7 +138,7 @@ Configura las transformaciones que aseguran la calidad de los datos antes del en
     * **Valores**: String.
 * **`drop_features`**: Nombres de las columnas irrelevantes o identificadores únicos a eliminar para evitar el sobreajuste. Deben coincidir exactamente con el nombre de la columna en el archivo `.csv`.
     * **Valores**: Lista de String `[]`.
-* **`missing_values`**: Activa o desactiva la gestión de datos faltantes en el dataset
+* **`missing_values`**: Activa o desactiva la gestión de datos faltantes en el dataset.
     * **Valores**: `"impute"` o `"none"`.
 * **`impute_strategy`**: Define el criterio estadístico para rellenar los valores nulos.
     * **Valores**: `"mean"`, `"median"` o `"most_frequent"`.
@@ -148,20 +149,20 @@ Configura las transformaciones que aseguran la calidad de los datos antes del en
 * **`min_samples`**: Define el número mínimo de apariciones que debe tener una clase. Útil para datasets sin balanceo.
   * **Valores**: Integer
 * **`text_processing`**: Diccionario que gestiona la vectorización y limpieza del lenguaje natural.
-	* **`enabled`**: Activa/desactiva el procesamiento de texto.
-		* **Valores**: `true` o `false`.
+    * **`enabled`**: Activa/desactiva el procesamiento de texto.
+        * **Valores**: `true` o `false`.
     * **`columns`**: Lista de columnas que contienen el texto a procesar.
-	    * **Valores**: Lista de String `[]`.
+        * **Valores**: Lista de String `[]`.
     * **`processing_type`**: Técnica de normalización.
-	    * **Valores**: `"stem"` o `"lemmatize"`.
+        * **Valores**: `"stem"` o `"lemmatize"`.
     * **`method`**: Técnica de vectorización.
-	    * **Valores**: `"bow"` o `"tfidf"`.
+        * **Valores**: `"bow"` o `"tfidf"`.
     * **`ngram_range`**: Define el rango de n-gramas (unigramas, bigramas) para capturar contexto.
-	   * **Valores**: Lista de Integer `[]`.
+        * **Valores**: Lista de Integer `[]`.
     * **`stopwords_domain`**: Lista de palabras personalizadas a ignorar (nombres de la app, verbos comunes sin carga semántica).
-	     * **Valores**: Lista de String `[]`.
+        * **Valores**: Lista de String `[]`.
     * **`negation_words`**: Palabras que deben conservarse para no perder el sentido negativo de las frases (ej. "no", "not").
-	     * **Valores**: Lista de String `[]`.
+        * **Valores**: Lista de String `[]`.
 
 #### 3. Hiperparámetros (`hyperparameters`)
 Define los rangos para el barrido automático (Grid Search) y la optimización de los modelos:
@@ -192,8 +193,8 @@ Define los rangos para el barrido automático (Grid Search) y la optimización d
         * **Valores**: Integer o `null`.
 * **`logistic_regression`**:
     * **`C`**: Define el parámetro de regularización (menor valor, mayor regularización).
-        * **Valores**: Lista de Integer `[]`. 
-    * **`solver`**:  Determina el algoritmo de optimización.
+        * **Valores**: Lista de números `[]`. 
+    * **`solver`**: Determina el algoritmo de optimización.
         * **Valores**: Lista de String `["lbfgs", "saga"]`. 
 
 ---
@@ -201,6 +202,10 @@ Define los rangos para el barrido automático (Grid Search) y la optimización d
 ## Requisitos
 El proyecto está desarrollado en Python 3.11. Para replicar el entorno de ejecución de forma sencilla, se recomienda el uso de un entorno virtual:
 ```bash
+# Creación y activación del entorno virtual
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+
 # Instalación de dependencias
 pip install -r requirements.txt
 ```
@@ -221,12 +226,12 @@ El script de entrenamiento requiere dos argumentos por línea de comandos: el ar
 ```bash
 python train.py TrainDev.csv configuration.json
 ```
-El script comparará el F-score del mejor modelo actual en `best_model/`. Si el nuevo entrenamiento lo supera, se sustituirán los  datos por los del nuevo modelo.
+El script comparará el F-score del mejor modelo actual en `best_model/`. Si el nuevo entrenamiento lo supera, se sustituirán los datos por los del nuevo modelo.
 
-***Nota:** El archivo `.csv` se puede indicar mediante su ruta directa o, si ya está `datos/` del proyecto correspondiente creado y se encuentra en esta, únicamente mediante su nombre*.
+***Nota:** El archivo `.csv` se puede indicar mediante su ruta directa o, si ya se encuentra en la carpeta `datos/` del proyecto correspondiente, únicamente mediante su nombre*.
 
 ### 3. Clasificación de Instancias
-Para predecir la clase de nuevas muestras, se utiliza el modelo guardado en el proyecto y carpeta correspondiente. Se debe indicar el nombre del proyecto, el nombre de la carpeta que contiene el modelo a probar y, si no ha sido generado de forma automática, el archivo de datos (cargado con datos nuevos) . 
+Para predecir la clase de nuevas muestras, se utiliza el modelo guardado en el proyecto y carpeta correspondiente. Se debe indicar el nombre del proyecto, el nombre de la carpeta que contiene el modelo a probar y, si no ha sido generado de forma automática, el archivo de datos (cargado con datos nuevos). 
 ```bash
 python test.py NombreDelProyecto NombreCarpetaModelo (Test.csv)
 ```
@@ -239,23 +244,22 @@ Para ejecutar la clasificación basada en LLM (Gemma 2) mediante _Few-Shot Promp
 ```bash
 python generativo_fewShot.py
 ```
-***Nota:** Asegúrate de tener el servicio de `Ollama` corriendo en segundo plano.*.
+***Nota:** Asegúrate de tener el servicio de `Ollama` corriendo en segundo plano.*
 
 ### 5. Análisis de Tópicos
 Para descubrir de qué hablan los usuarios y visualizar los resultados:
 
 ```bash
 # Evaluar la coherencia semántica para decidir el número óptimo de tópicos (K)
-python grafico_lda.p
+python grafico_lda.py
 # Aplicar los hiperparámetros óptimos y generar el informe de Inteligencia de Negocio
-python clustering_lda.py 
-
+python clustering_lda.py
 ```
 
 ---
 
-## Librerias Empleadas
-Este proyecto utiliza distintas librerias, todas ellas incluidas en el archivo `requirements.txt`.
+## Librerías empleadas
+Este proyecto utiliza distintas librerías, todas ellas incluidas en el archivo `requirements.txt`.
 
 ---
 
